@@ -57,13 +57,12 @@
   }
 
   * { box-sizing: border-box; }
-  html { scroll-padding-top: var(--safe-t); }
+  html { scroll-padding-top: var(--safe-t); font-size: calc(16px * var(--font-scale)); }
   body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-sans);
-    font-size: calc(16px * var(--font-scale));
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     padding-bottom: calc(40px + var(--safe-b));

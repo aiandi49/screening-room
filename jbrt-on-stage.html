@@ -66,14 +66,13 @@
   }
 
   * { box-sizing: border-box; }
-  html { scroll-padding-top: var(--safe-t); }
+  html { scroll-padding-top: var(--safe-t); font-size: calc(16px * var(--font-scale)); }
   html, body { height: 100%; }
   body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-sans);
-    font-size: calc(16px * var(--font-scale));
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     transition: background .25s ease, color .25s ease;
@@ -359,7 +358,10 @@
   nav.back {
     max-width: 720px;
     margin: 0 auto 18px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
   }
   nav.back a {
     text-decoration: none;
@@ -369,6 +371,39 @@
     border-bottom: 1px solid var(--line);
     padding-bottom: 2px;
   }
+
+  .prev-next {
+    max-width: 720px;
+    margin: 0 auto 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .prev-next a {
+    flex: 1 1 200px;
+    text-decoration: none;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text);
+  }
+  .prev-next .pn-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    color: var(--text-soft);
+    margin-bottom: 4px;
+  }
+  .prev-next .pn-title {
+    display: block;
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .prev-next .next-item { text-align: right; margin-left: auto; }
 
   footer {
     text-align: center;
@@ -411,7 +446,7 @@
     </div>
 
     <main>
-      <nav class="back"><a href="index.html">&larr; All reels</a></nav>
+      <nav class="back"><a href="index.html">&larr; All reels</a><a href="https://jbrt-three.vercel.app/">JBRT Home &rarr;</a></nav>
 
       <div class="hero">
         <p class="kicker"><span class="num">04</span> &nbsp;CONCEPT REEL</p>
@@ -469,6 +504,8 @@
           <a class="btn primary" id="downloadBtn" href="https://msuqflssqixsplcearxr.supabase.co/storage/v1/object/sign/videos/jbrt_on_stage.mp4?token=eyJraWQiOiI0ZDQ5MTFmZS03ZjRmLTQ3MTktYWQzZS1mM2ZjMDUwOTViOGYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlb3MvamJydF9vbl9zdGFnZS5tcDQiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg5ODMxMTM5LCJleHAiOjE4MjEzNjcxMzl9.UoOxsE63mh7b2bX0K6Qla8wa39Lag36azDHAFN1nc0g" download="jbrt_on_stage.mp4">Download original</a>
         </div>
       </section>
+
+      <nav class="prev-next"><a class="prev-item" href="reel-to-reel.html"><span class="pn-label">&larr; PREVIOUS</span><span class="pn-title">Reel to Reel</span></a><a class="next-item" href="jbrt-world-tour.html"><span class="pn-label">NEXT &rarr;</span><span class="pn-title">JBRT World Tour</span></a></nav>
 
       <footer>Jimmibeetles Rock Theatre &middot; concept reel 04 &middot; AI&amp;I</footer>
     </main>
