@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>JBRT on Stage — Jimmibeetles Rock Theatre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+    --font-display: "Cormorant Garamond", Georgia, serif;
+    --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+
+    --ocean-950: #062024;
+    --ocean-900: #0a2e33;
+    --ocean-800: #0e3d44;
+    --teal-600: #0f8f8a;
+    --teal-500: #14b8a6;
+    --teal-400: #2dd4bf;
+    --aqua-200: #cdf5ef;
+    --aqua-100: #e7faf6;
+    --seafoam-300: #a6e8d3;
+    --paper: #fbfefe;
+    --ink: #0b2e33;
+    --ink-soft: #3d5a5e;
+    --line: rgba(11, 46, 51, 0.14);
+
+    --bg: var(--paper);
+    --surface: #ffffff;
+    --text: var(--ink);
+    --text-soft: var(--ink-soft);
+    --accent: var(--teal-600);
+    --accent-strong: var(--ocean-900);
+    --card-shadow: 0 18px 40px rgba(10, 46, 51, 0.10), 0 2px 8px rgba(10,46,51,0.06);
+    --stripe: var(--teal-500);
+
+    --font-scale: 1;
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: var(--ocean-950);
+      --surface: #0c3138;
+      --text: var(--aqua-100);
+      --text-soft: #9fd4cf;
+      --accent: var(--teal-400);
+      --accent-strong: var(--seafoam-300);
+      --line: rgba(205, 245, 239, 0.16);
+      --card-shadow: 0 18px 40px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: var(--ocean-950);
+    --surface: #0c3138;
+    --text: var(--aqua-100);
+    --text-soft: #9fd4cf;
+    --accent: var(--teal-400);
+    --accent-strong: var(--seafoam-300);
+    --line: rgba(205, 245, 239, 0.16);
+    --card-shadow: 0 18px 40px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.25);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: var(--safe-t); }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: calc(16px * var(--font-scale));
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    transition: background .25s ease, color .25s ease;
+    padding-bottom: calc(48px + var(--safe-b));
+  }
+
+  a { color: inherit; }
+
+  /* ---------- Top utility bar ---------- */
+  .utility-bar {
+    position: sticky;
+    top: var(--safe-t);
+    z-index: 40;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .util-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px;
+  }
+  .util-btn {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--text-soft);
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    padding: 6px 11px;
+    border-radius: 999px;
+    cursor: pointer;
+    min-height: 30px;
+  }
+  .util-btn[aria-pressed="true"], .util-btn.active {
+    background: var(--accent);
+    color: var(--surface);
+  }
+  .util-icon-btn {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text);
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  /* ---------- Layout / brand stripe ---------- */
+  .page {
+    display: flex;
+    flex-direction: column;
+  }
+  .stripe {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 0;
+    background: var(--stripe);
+    color: #052024;
+  }
+  .stripe-text {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .22em;
+  }
+  .stripe-dot { width: 5px; height: 5px; border-radius: 50%; background: #052024; opacity: .55; }
+
+  main {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 40px 20px 0;
+  }
+
+  .hero {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 32px;
+  }
+  .kicker {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 12.5px;
+    letter-spacing: .2em;
+    color: var(--accent);
+  }
+  .kicker .num { color: var(--text-soft); font-weight: 700; }
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: clamp(2rem, 5.4vw, 3.4rem);
+    line-height: 1.06;
+    margin: 10px 0 14px;
+  }
+  .blurb {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    color: var(--text-soft);
+    max-width: 60ch;
+    margin: 0 auto;
+  }
+
+  /* ---------- Player card ---------- */
+  .reel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    margin: 0 auto 28px;
+  }
+  .video-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+  }
+  video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    background: #000;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .play-btn {
+    appearance: none;
+    border: none;
+    background: var(--accent);
+    color: var(--surface);
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .scrub {
+    flex: 1 1 160px;
+    accent-color: var(--accent);
+    height: 22px;
+  }
+  .time {
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    color: var(--text-soft);
+    min-width: 92px;
+    text-align: right;
+  }
+
+  /* ---------- Sections ---------- */
+  section.panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--card-shadow);
+    padding: 24px 22px;
+    margin: 0 auto 22px;
+  }
+  .panel h2 {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    margin: 0 0 4px;
+    text-align: center;
+  }
+  .panel .sub {
+    text-align: center;
+    color: var(--text-soft);
+    font-size: 14px;
+    margin: 0 0 18px;
+  }
+
+  .trim-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 60px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .trim-row label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-soft);
+    letter-spacing: .04em;
+  }
+  .trim-row input[type="range"] { accent-color: var(--accent); width: 100%; }
+  .trim-row .val { font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; color: var(--text-soft); }
+
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .btn {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 13.5px;
+    padding: 11px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    min-height: 44px;
+  }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--surface);
+  }
+  .btn:active { transform: translateY(1px); }
+  .status-line {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-soft);
+    margin-top: 12px;
+    min-height: 18px;
+  }
+
+  .share-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .share-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .share-row code {
+    flex: 1;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    color: var(--text-soft);
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 2px 0;
+  }
+  .share-row .btn { padding: 8px 14px; font-size: 12.5px; min-height: 36px; }
+
+  nav.back {
+    max-width: 720px;
+    margin: 0 auto 18px;
+    text-align: center;
+  }
+  nav.back a {
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-soft);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 2px;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--text-soft);
+    font-size: 12px;
+    padding: 30px 20px calc(20px + var(--safe-b));
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (min-width: 780px) {
+    main { padding-top: 56px; }
+    .hero { text-align: left; margin-left: 0; }
+    .blurb { margin-left: 0; }
+    .panel h2, .panel .sub { text-align: left; }
+    .btn-row { justify-content: flex-start; }
+  }
+
+  @media (max-width: 480px) {
+    .trim-row { grid-template-columns: 46px 1fr 46px; }
+    .controls { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="utility-bar">
+    <div class="util-group" role="group" aria-label="Text size">
+      <button class="util-btn" data-size="0.9" aria-pressed="false">A&#8211;</button>
+      <button class="util-btn active" data-size="1" aria-pressed="true">A</button>
+      <button class="util-btn" data-size="1.15" aria-pressed="false">A+</button>
+    </div>
+    <button class="util-icon-btn" id="themeToggle" aria-label="Toggle dark mode">&#9789;</button>
+  </div>
+
+  <div class="page">
+    <div class="stripe">
+      <span class="stripe-text">JIMMIBEETLES ROCK THEATRE</span>
+      <span class="stripe-dot"></span>
+      <span class="stripe-text">CONCEPT SCREENING ROOM</span>
+    </div>
+
+    <main>
+      <nav class="back"><a href="index.html">&larr; All reels</a></nav>
+
+      <div class="hero">
+        <p class="kicker"><span class="num">04</span> &nbsp;CONCEPT REEL</p>
+        <h1>JBRT on Stage</h1>
+        <p class="blurb">A first pass at a live shot — one of the stronger frames so far, and a test case for how far we push the likeness.</p>
+      </div>
+
+      <div class="reel">
+        <div class="video-wrap">
+          <video id="video" src="https://msuqflssqixsplcearxr.supabase.co/storage/v1/object/public/videos/jbrt_on_stage.mp4" crossorigin="anonymous" playsinline preload="metadata"></video>
+        </div>
+        <div class="controls">
+          <button class="play-btn" id="playBtn" aria-label="Play">&#9654;</button>
+          <input type="range" class="scrub" id="scrub" min="0" max="100" step="0.01" value="0" aria-label="Seek">
+          <span class="time" id="timeLabel">0:00 / 0:00</span>
+        </div>
+      </div>
+
+      <section class="panel">
+        <h2>Clip a moment</h2>
+        <p class="sub">Set an in and out point, preview it, then save just that clip to your own device.</p>
+
+        <div class="trim-row">
+          <label>Start</label>
+          <input type="range" id="startRange" min="0" max="100" step="0.01" value="0">
+          <span class="val" id="startVal">0:00</span>
+        </div>
+        <div class="trim-row">
+          <label>End</label>
+          <input type="range" id="endRange" min="0" max="100" step="0.01" value="100">
+          <span class="val" id="endVal">0:00</span>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn" id="previewBtn">Preview clip</button>
+          <button class="btn primary" id="saveClipBtn">Save clip to device</button>
+        </div>
+        <p class="status-line" id="clipStatus"></p>
+      </section>
+
+      <section class="panel">
+        <h2>Share this reel</h2>
+        <p class="sub">Download the full-resolution original, or copy a link to drop straight into the site.</p>
+        <ul class="share-list">
+          <li class="share-row">
+            <code id="urlText">https://msuqflssqixsplcearxr.supabase.co/storage/v1/object/public/videos/jbrt_on_stage.mp4</code>
+            <button class="btn" id="copyUrlBtn">Copy link</button>
+          </li>
+          <li class="share-row">
+            <code id="embedText">&lt;video src="https://msuqflssqixsplcearxr.supabase.co/storage/v1/object/public/videos/jbrt_on_stage.mp4" controls&gt;&lt;/video&gt;</code>
+            <button class="btn" id="copyEmbedBtn">Copy embed</button>
+          </li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn primary" id="downloadBtn" href="https://msuqflssqixsplcearxr.supabase.co/storage/v1/object/public/videos/jbrt_on_stage.mp4" download="jbrt_on_stage.mp4">Download original</a>
+        </div>
+      </section>
+
+      <footer>Jimmibeetles Rock Theatre &middot; concept reel 04 &middot; AI&amp;I</footer>
+    </main>
+  </div>
+
+<script>
+(function () {
+  // ---------- Theme ----------
+  var root = document.documentElement;
+  var themeBtn = document.getElementById('themeToggle');
+  function applyTheme(t) {
+    if (t === 'dark') { root.setAttribute('data-theme', 'dark'); themeBtn.innerHTML = '&#9728;'; }
+    else { root.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '&#9789;'; }
+  }
+  var savedTheme = 'light';
+  try { savedTheme = localStorage.getItem('jbrt-theme') || 'light'; } catch (e) {}
+  applyTheme(savedTheme);
+  themeBtn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem('jbrt-theme', next); } catch (e) {}
+  });
+
+  // ---------- Font size ----------
+  var sizeBtns = document.querySelectorAll('.util-btn[data-size]');
+  function applySize(scale, btn) {
+    root.style.setProperty('--font-scale', scale);
+    sizeBtns.forEach(function (b) { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+    if (btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); }
+  }
+  var savedScale = null;
+  try { savedScale = localStorage.getItem('jbrt-font-scale'); } catch (e) {}
+  if (savedScale) {
+    var match = Array.prototype.find.call(sizeBtns, function (b) { return b.dataset.size === savedScale; });
+    applySize(savedScale, match);
+  }
+  sizeBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      applySize(btn.dataset.size, btn);
+      try { localStorage.setItem('jbrt-font-scale', btn.dataset.size); } catch (e) {}
+    });
+  });
+
+  // ---------- Player ----------
+  var video = document.getElementById('video');
+  var playBtn = document.getElementById('playBtn');
+  var scrub = document.getElementById('scrub');
+  var timeLabel = document.getElementById('timeLabel');
+  var startRange = document.getElementById('startRange');
+  var endRange = document.getElementById('endRange');
+  var startVal = document.getElementById('startVal');
+  var endVal = document.getElementById('endVal');
+  var previewBtn = document.getElementById('previewBtn');
+  var saveClipBtn = document.getElementById('saveClipBtn');
+  var clipStatus = document.getElementById('clipStatus');
+
+  function fmt(s) {
+    if (!isFinite(s)) return '0:00';
+    var m = Math.floor(s / 60);
+    var sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  video.addEventListener('loadedmetadata', function () {
+    var d = video.duration || 0;
+    [scrub, startRange, endRange].forEach(function (r) { r.max = d; });
+    endRange.value = d;
+    startVal.textContent = fmt(0);
+    endVal.textContent = fmt(d);
+    timeLabel.textContent = fmt(0) + ' / ' + fmt(d);
+  });
+
+  video.addEventListener('timeupdate', function () {
+    scrub.value = video.currentTime;
+    timeLabel.textContent = fmt(video.currentTime) + ' / ' + fmt(video.duration || 0);
+  });
+
+  playBtn.addEventListener('click', function () {
+    if (video.paused) { video.play(); playBtn.innerHTML = '&#10074;&#10074;'; }
+    else { video.pause(); playBtn.innerHTML = '&#9654;'; }
+  });
+  video.addEventListener('pause', function () { playBtn.innerHTML = '&#9654;'; });
+  video.addEventListener('play', function () { playBtn.innerHTML = '&#10074;&#10074;'; });
+
+  scrub.addEventListener('input', function () { video.currentTime = parseFloat(scrub.value); });
+
+  function clampRanges() {
+    if (parseFloat(startRange.value) > parseFloat(endRange.value) - 0.2) {
+      startRange.value = Math.max(0, parseFloat(endRange.value) - 0.2);
+    }
+  }
+  startRange.addEventListener('input', function () {
+    clampRanges();
+    startVal.textContent = fmt(parseFloat(startRange.value));
+  });
+  endRange.addEventListener('input', function () {
+    if (parseFloat(endRange.value) < parseFloat(startRange.value) + 0.2) {
+      endRange.value = parseFloat(startRange.value) + 0.2;
+    }
+    endVal.textContent = fmt(parseFloat(endRange.value));
+  });
+
+  var previewing = false;
+  function onPreviewTimeUpdate() {
+    if (previewing && video.currentTime >= parseFloat(endRange.value)) {
+      video.pause();
+      previewing = false;
+    }
+  }
+  previewBtn.addEventListener('click', function () {
+    video.currentTime = parseFloat(startRange.value);
+    previewing = true;
+    video.play();
+  });
+  video.addEventListener('timeupdate', onPreviewTimeUpdate);
+
+  // ---------- Copy link / embed ----------
+  function copyText(text, btn) {
+    var originalLabel = btn.textContent;
+    function flash(label) {
+      btn.textContent = label;
+      setTimeout(function () { btn.textContent = originalLabel; }, 1600);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        flash('Copied!');
+      }).catch(function () {
+        fallbackCopy(text, flash);
+      });
+    } else {
+      fallbackCopy(text, flash);
+    }
+  }
+  function fallbackCopy(text, flash) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand('copy');
+      flash('Copied!');
+    } catch (e) {
+      window.prompt('Copy this link:', text);
+    }
+    document.body.removeChild(ta);
+  }
+  document.getElementById('copyUrlBtn').addEventListener('click', function () {
+    copyText(document.getElementById('urlText').textContent, this);
+  });
+  document.getElementById('copyEmbedBtn').addEventListener('click', function () {
+    copyText(document.getElementById('embedText').textContent, this);
+  });
+
+  // ---------- Save clip (canvas + MediaRecorder) ----------
+  saveClipBtn.addEventListener('click', function () {
+    var start = parseFloat(startRange.value);
+    var end = parseFloat(endRange.value);
+    if (end - start < 0.2) { clipStatus.textContent = 'Set a start and end point first.'; return; }
+    if (typeof MediaRecorder === 'undefined') {
+      clipStatus.textContent = "This browser can't save clips locally — try Chrome or Edge, or download the original and trim it in your editor.";
+      return;
+    }
+    saveClipBtn.disabled = true;
+    clipStatus.textContent = 'Recording clip\u2026 keep this tab open.';
+
+    var canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth || 1280;
+    canvas.height = video.videoHeight || 720;
+    var ctx = canvas.getContext('2d');
+    var stream = canvas.captureStream(30);
+
+    try {
+      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var source = audioCtx.createMediaElementSource(video);
+      var dest = audioCtx.createMediaStreamDestination();
+      source.connect(dest);
+      source.connect(audioCtx.destination);
+      dest.stream.getAudioTracks().forEach(function (t) { stream.addTrack(t); });
+    } catch (e) { /* video will still export, silently, if audio routing fails */ }
+
+    var options = { mimeType: 'video/webm;codecs=vp9,opus' };
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) options = { mimeType: 'video/webm' };
+    var recorder;
+    try { recorder = new MediaRecorder(stream, options); }
+    catch (e) {
+      clipStatus.textContent = "Couldn't start the clip recorder in this browser. Download the original instead and trim it locally.";
+      saveClipBtn.disabled = false;
+      return;
+    }
+    var chunks = [];
+    recorder.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
+    recorder.onstop = function () {
+      var blob = new Blob(chunks, { type: 'video/webm' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'jbrt-on-stage-clip.webm';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      clipStatus.textContent = 'Clip saved to your downloads.';
+      saveClipBtn.disabled = false;
+    };
+
+    video.currentTime = start;
+    var wasMuted = video.muted;
+    var draw = function () {
+      if (video.paused || video.ended || video.currentTime >= end) {
+        recorder.stop();
+        video.pause();
+        return;
+      }
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      requestAnimationFrame(draw);
+    };
+    video.addEventListener('seeked', function onSeeked() {
+      video.removeEventListener('seeked', onSeeked);
+      recorder.start();
+      video.play().catch(function () {
+        clipStatus.textContent = "Playback couldn't start automatically — tap play once, then try Save clip again.";
+        saveClipBtn.disabled = false;
+      });
+      draw();
+    });
+  });
+})();
+</script>
+</body>
+</html>
